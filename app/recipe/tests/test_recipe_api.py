@@ -118,10 +118,10 @@ class PrivateRecipeApiTests(TestCase):
         res = self.client.post(RECIPE_URLS, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        recipe = Recipe.objects.create(id=res.data['id'])
-        for key in parload.keys():
+        recipe = Recipe.objects.get(id=res.data['id'])
+        for key in payload.keys():
             self.assertEqual(payload[key], getattr(recipe, key))
-        
+
     def test_create_recipe_with_tags(self):
         """Test creating a recipe with tags"""
         tag1 = sample_tag(user=self.user, name='Vegan')
@@ -145,7 +145,7 @@ class PrivateRecipeApiTests(TestCase):
         """Test creating recipe with ingredients"""
         ingredient1 = sample_ingredient(user=self.user, name='Prawns')
         ingredient2 = sample_ingredient(user=self.user, name='Ginger')
-        paylaod = {
+        payload = {
             'title': 'Thai prawn red curry',
             'ingredients': [ingredient1.id, ingredient2.id],
             'time_minutes': 20,
